@@ -1,29 +1,32 @@
-import './ContactList.css';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
+import css from './ContactList.module.css';
 
-const ContactList = ({ contacts, deleteContact }) => {
-  return (
-    <ul className="List_box">
-      {contacts.map(contact => (
-        <li className="List_item" key={contact.id}>
-          <span>
-            {contact.name}: <span className="List_span">{contact.number}</span>
-          </span>
+export const ContactList = ({ contacts, handleDelete }) => (
+  <div className={css.wraperContactList}>
+    <ul className={css.contactList}>
+      {contacts.map((contact, id) => (
+        <li key={id} className={css.contactListItem}>
+          {contact.name}: {contact.number}
           <button
-            className="List_button"
-            onClick={() => deleteContact(contact.id)}
+            type="button"
+            className={css.contactListItemBtn}
+            onClick={() => handleDelete(contact.id)}
           >
-            delete
+            Delete
           </button>
         </li>
       ))}
     </ul>
-  );
-};
-
-export default ContactList;
+  </div>
+);
 
 ContactList.propTypes = {
-  contacts: PropTypes.array,
-  deleteContact: PropTypes.func,
+  contacts: propTypes.arrayOf(
+    propTypes.exact({
+      id: propTypes.string.isRequired,
+      name: propTypes.string.isRequired,
+      number: propTypes.string.isRequired,
+    })
+  ),
+  handleDelete: propTypes.func.isRequired,
 };
